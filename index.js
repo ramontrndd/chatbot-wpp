@@ -4,7 +4,7 @@ import  {GoogleGenerativeAI } from '@google/generative-ai'
 
 import dotenv from 'dotenv';
 dotenv.config();
-const { Client, LocalAuth } = pkg;
+const { Client, LocalAuth, MessageMedia, Buttons } = pkg;
 
 // Create a new client instance
 
@@ -29,9 +29,11 @@ client.on('message', async (message) => {
         const prompt = message.body;
         try { 
             const result = await model.generateContent(prompt);
-            message.reply(result.response.text())
+           
+            client.sendMessage(message.from, result.response.text());
         } catch (err) {
             console.log(err);
+            client.sendMessage(message.from, "Ocorreu um erro ao tentar gerar a resposta, tente novamente.");
         }
     }
 });
