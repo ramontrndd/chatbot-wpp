@@ -2,6 +2,7 @@
   "name": "chatbot-wpp",
   "version": "1.0.0",
   "main": "index.js",
+
   "scripts": {
     "start": "node --watch ."
   },
@@ -9,7 +10,9 @@
   "author": "",
   "license": "ISC",
   "description": "",
+  "type": "module",
   "dependencies": {
+    "@google/generative-ai": "^0.21.0",
     "axios": "^1.7.7",
     "dotenv": "^16.4.5",
     "openai": "^4.67.3",

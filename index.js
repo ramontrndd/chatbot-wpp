@@ -1,7 +1,15 @@
-const { Client, NoAuth, LocalAuth } = require('whatsapp-web.js');
-const qrcode = require('qrcode-terminal');
+import pkg from 'whatsapp-web.js';
+import  qrcode from 'qrcode-terminal';
+import  {GoogleGenerativeAI } from '@google/generative-ai'
+
+import dotenv from 'dotenv';
+dotenv.config();
+const { Client, LocalAuth } = pkg;
 
 // Create a new client instance
+
+const genAI = new GoogleGenerativeAI(process.env.API_KEY);
+const model = genAI.getGenerativeModel({model: "gemini-1.5-flash"})
 
 const client = new Client({
     authStrategy: new LocalAuth(),
@@ -16,9 +24,15 @@ client.on( 'ready', () => {
     
 });
 
-client.on('message_create', async (message) => {
-    if (message.body === '!Oi') {
-        await message.reply('Olá, como posso te ajudar?');
+client.on('message', async (message) => {
+    if (message.body) { 
+        const prompt = message.body;
+        try { 
+            const result = await model.generateContent(prompt);
+            message.reply(result.response.text())
+        } catch (err) {
+            console.log(err);
+        }
     }
 });
 
